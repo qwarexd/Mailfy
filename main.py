@@ -2,6 +2,8 @@ import socket
 import threading
 import sys
 import tkinter as tk
+import os
+import winsound
 from ui.auth_window import AuthWindow
 from ui.contact_list import ContactListWindow
 from ui.chat_window import ChatWindow
@@ -12,6 +14,16 @@ client_socket = None
 open_chats = {}
 root = None
 global_open_chat_handler = None
+
+
+
+def play_message_sound():
+    sound_path = os.path.join("resources", "message.wav")
+    if os.path.exists(sound_path):
+        winsound.PlaySound(sound_path, winsound.SND_FILENAME | winsound.SND_ASYNC)
+    else:
+        print("[LOG] что то сломалось и звук не проигрался хз")
+        winsound.MessageBeep
 
 
 
@@ -28,6 +40,8 @@ def listen_server():
                     sender, message = data.split(":", 1)
                     sender = sender.strip()
 
+                    play_message_sound()
+
                     if sender in open_chats:
                         root.after(0, lambda s=sender, m=message: open_chats[s].display_message(s, m))
                     else:
@@ -42,6 +56,7 @@ def auto_open_chat(sender, message):
         global_open_chat_handler(sender, silent=True)
         if sender in open_chats:
             open_chats[sender].display_message(sender, message)
+
 
 
 
