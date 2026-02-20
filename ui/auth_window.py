@@ -6,7 +6,7 @@ class AuthWindow:
     def __init__(self, on_login_callback):
         self.window = tk.Toplevel()
         self.window.title("MailFy Agent 0.2.0")
-        self.window.geometry("300x400")
+        self.window.geometry("240x250")
         self.window.configure(bg="#F0F4F9")
         self.window.resizable(False, False)
 
@@ -27,7 +27,7 @@ class AuthWindow:
         self.email_entry.pack(pady=5)
         self.email_entry.insert(0, "admin") # Для удобства тестов
 
-        # 2. Поле ввода E-mail
+# 2. Поле ввода E-mail
         tk.Label(self.window, text="E-mail:", bg="#F0F4F9", font=("Tahoma", 9)).pack(anchor="w", padx=40)
         self.email_entry = tk.Entry(self.window, width=30)
         self.email_entry.pack(pady=5)
@@ -42,7 +42,7 @@ class AuthWindow:
         # 4. Чекбокс "Запомнить пароль" (стиль 5.9)
         self.remember_var = tk.BooleanVar()
         self.check = tk.Checkbutton(
-            self.window, text="Запомнить пароль", variable=self.remember_var,
+            self.window, text="Запомнить пароль", variable=self.remember_var, # кстати вроде как не работает и пороль соотвественно не запоминает
             bg="#F0F4F9", activebackground="#F0F4F9", font=("Tahoma", 8)
         )
         self.check.pack(pady=10)
@@ -64,6 +64,7 @@ class AuthWindow:
         print(f"[LOG] Нажата кнопка входа. Данные: {email} / {password}")
 
 
+        # Имитируем "базу данных" для теста
         if email and password == "1234":
             print("[LOG] Данные верны, вызываем переход...")
             print(f"Успешный вход: {email}")
@@ -73,6 +74,7 @@ class AuthWindow:
             print("[LOG] Ошибка: Неверные данные")
             messagebox.showerror("Ошибка", "Неверный e-mail или пароль!\nПодсказка: а хуй тебе мальчик")
 
+# Тестовый запуск
 if __name__ == "__main__":
     def start_main_app(user):
         print(f"Переход к списку контактов для {user}")

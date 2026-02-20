@@ -1,10 +1,11 @@
 import tkinter as tk
 from tkinter import scrolledtext
+import ctypes
 
 class ChatWindow:
     def __init__(self, contact_name, send_callback):
         self.window = tk.Toplevel() # Toplevel, чтобы не закрывать список контактов
-        self.window.title(f"Разговор с {contact_name} - Mail.Sex Agent")
+        self.window.title(f"Разговор с {contact_name} - MailFy Agent")
         self.window.geometry("400x500")
         self.window.configure(bg="#F0F4F9")
 
@@ -41,8 +42,13 @@ class ChatWindow:
             self.send_callback(self.contact_name, message) # Отправляем в сеть
             self.msg_entry.delete(0, tk.END)
 
-    def display_message(self, sender, text):
-        self.chat_history.config(state='normal')
-        self.chat_history.insert(tk.END, f"{sender}: {text}\n")
-        self.chat_history.config(state='disabled')
-        self.chat_history.yview(tk.END)
+    def display_message(self, sender, message):
+        self.chat_display.config(state='normal') # Разрешаем редактирование
+        self.chat_display.insert(tk.END, f"{sender}: {message}\n")
+        self.chat_display.config(state='disabled') # Запрещаем обратно
+        self.chat_display.see(tk.END) # Прокрутка вниз
+        
+        if self.window.state() == 'iconic':
+
+            hwnd = ctypes.windll.user32.GetParent(self.window.winfo_id())
+            ctypes.windll.user32.FlashWindow(hwnd, True)
